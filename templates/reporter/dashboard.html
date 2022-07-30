@@ -1,0 +1,106 @@
+{% extends 'reporter/base.html' %}
+{% load static %}
+{% load crispy_forms_filters %}
+{% block title %}
+    Dashboard
+{% endblock %}
+{% block sec %}
+    <section class="grid">
+        <article
+                style="background-color:#000000; height: 100vh!important; padding-bottom: 10px; padding-top: 30px; padding-left: 20%!important;">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-4">
+                        <div class="neon__card_for_month" style="margin: 5px">
+                            <a href="" style="text-decoration: none; color: white"><img
+                                    src="{{ profile.profile_picture.url }}" width="200px" height="200px"></a>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-8">
+
+                        <div class="" style="margin: 25px; color: white;">
+                            <h1 class="neon__title_for_routine">
+                                <b>{{ profile.user.first_name }} {{ profile.user.last_name }} </b></h1>
+                            <hr style="margin-bottom: 2px!important;">
+                            <hr>
+                            <div class="row">
+                                <div class="col-lg-3"><h1 style="font-size: 14px; float: left!important;">
+                                    Contact:</h1></div>
+                                <div class="col-lg-9"><h1 style="font-size: 14px; float: left!important;">
+                                    {{ profile.phone_number }}</h1></div>
+                            </div>
+                            <hr style="margin-top: 0!important; margin-bottom: 2px!important;">
+                            <div class="row">
+                                <div class="col-lg-3"><h1 style="font-size: 14px; float: left!important;">
+                                    Email:</h1></div>
+                                <div class="col-lg-9"><h1 style="font-size: 14px; float: left!important;">
+                                    {{ profile.user.email }}</h1></div>
+                            </div>
+                            <hr style="margin-top: 0!important; margin-bottom: 2px!important;">
+                            <div class="row">
+                                <div class="col-lg-3"><h1 style="font-size: 14px; float: left!important;">
+                                    Address:</h1></div>
+                                <div class="col-lg-9"><h1 style="font-size: 14px; float: left!important;">
+                                    {{ profile.address }}, {{ profile.area }}, {{ profile.city }}-{{ profile.zip_code }}, {{ profile.country.name }}</h1>
+                                </div>
+                            </div>
+                            <hr style="margin-top: 3px!important; margin-bottom: 5px!important;">
+                            <div class="row">
+                                <div class="col-lg-3"><h1 style="font-size: 14px; float: left!important;">
+                                    Joining Date:</h1></div>
+                                <div class="col-lg-9"><h1 style="font-size: 14px; float: left!important;">
+                                    {{ profile.joining_date }}</h1></div>
+                            </div>
+                            <hr style="margin-top: 0!important; margin-bottom: 2px!important;">
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <hr style="color: white; width: 98%;">
+            <hr style="color: white; width: 98%;">
+            <hr style="color: white; width: 98%;">
+            <div class="container" style="padding-right: 5%">
+                <div class="row" style="width: 100%">
+                    <div class="col-lg-3">
+                        <div class="neon__card" style="margin: 20px">
+                            <h1 class="neon__title">Write New Report</h1>
+                            <p></p>
+                            <a href="{% url 'App_main:new-report' %}" class="neon__button">Write Report</a>
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="neon__card" style="margin: 20px">
+                            <a href="" style="text-decoration: none; color: white"><h1 class="neon__title">All Approved
+                                Reports</h1></a>
+                            <p></p>
+                            <a href="{% url 'App_main:approved-report' %}" class="neon__button">Check Views</a>
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="neon__card" style="margin: 20px">
+                            <a href="" style="text-decoration: none; color: white"><h1 class="neon__title">All Pending
+                                Reports</h1></a>
+                            <p></p>
+                            <a href="{% url 'App_main:pending-report' %}" class="neon__button">Check Status</a>
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="neon__card" style="margin: 20px">
+                            <a href="" style="text-decoration: none; color: white"><h1 class="neon__title">All Rejected
+                                Reports</h1></a>
+                            <p></p>
+                            <a href="{% url 'App_main:rejected-report' %}" class="neon__button">Check Status</a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <hr style="color: white; width: 98%;">
+            <hr style="color: white; width: 98%;">
+            <hr style="color: white; width: 98%;">
+        </article>
+    </section>
+{% endblock %}
+

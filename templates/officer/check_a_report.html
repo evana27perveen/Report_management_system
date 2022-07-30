@@ -1,0 +1,193 @@
+{% extends 'officer/base.html' %}
+{% load static %}
+{% load crispy_forms_filters %}
+{% block title %}
+    Checking This Report
+{% endblock %}
+
+{% block sec %}
+    <style>
+        .main_div {
+            background-color: #f5e6ad;
+            width: 100%;
+        }
+    </style>
+    {#    ----------------------------wrap-------------------#}
+    <style>
+        .mywrapper {
+            min-height: 5vh;
+            display: block;
+            flex-wrap: nowrap;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .title {
+            color: black;
+            font-family: Montserrat;
+            text-transform: uppercase;
+            text-align: center;
+            font-weight: 500;
+            font-size: 2em;
+        }
+
+
+        .tracking-in-expand {
+            -webkit-animation: tracking-in-expand 2s cubic-bezier(0.215, 0.610, 0.355, 1.000) 0.5s both;
+            animation: tracking-in-expand 2s cubic-bezier(0.215, 0.610, 0.355, 1.000) 0.5s both;
+        }
+
+        @-webkit-keyframes tracking-in-expand {
+            0% {
+                letter-spacing: -0.5em;
+                opacity: 0;
+            }
+
+            40% {
+                opacity: 0.6;
+            }
+
+            60% {
+                -webkit-transform: translateY(0);
+                transform: translateY(0);
+            }
+
+            70% {
+                -webkit-transform: translateY(0);
+                transform: translateY(0);
+            }
+
+            100% {
+                opacity: 1;
+                -webkit-transform: translateY(-22vh);
+                transform: translateY(-22vh);
+            }
+        }
+
+        @keyframes tracking-in-expand {
+            0% {
+                letter-spacing: -0.5em;
+                opacity: 0;
+            }
+
+            40% {
+                opacity: 0.6;
+            }
+
+            60% {
+                -webkit-transform: translateY(0);
+                transform: translateY(0);
+            }
+
+            70% {
+                -webkit-transform: translateY(0);
+                transform: translateY(0);
+            }
+
+            100% {
+                opacity: 1;
+                -webkit-transform: translateY(-22vh);
+                transform: translateY(-22vh);
+            }
+        }
+    </style>
+
+    <div class="container" style="font-family: 'PT Serif', serif;">
+        <div class="row">
+            <div class="col-lg-9" style="overflow-y: scroll; height: 93vh; padding: 20px 20px 20px 10%">
+                <div class="row">
+                    {% if report.report_image1 %}
+                        <div class="col-lg-6" style="margin-top: 10px; width: fit-content!important;">
+                            <img src="{{ report.report_image1.url }}" alt="" height="300px"
+                                 width="320px">
+                        </div>
+                    {% endif %}
+                    {% if report.report_image2 %}
+                        <div class="col-lg-6" style="margin-top: 10px; width: fit-content!important;">
+                            <img src="{{ report.report_image2.url }}" alt="" height="300px"
+                                 width="320px">
+                        </div>
+                    {% endif %}
+                    {% if report.report_image3 %}
+                        <div class="col-lg-6" style="margin-top: 10px; width: fit-content; margin-left: 30%">
+                            <img src="{{ report.report_image3.url }}" alt="" height="300px"
+                                 width="320px">
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="row">
+                    <div class="card-body" style="margin-top: 10px">
+                        <h4 class="card-title"><b>{{ report.title }}</b></h4>
+                        <small class="card-title" style="color: darkred"><b>Location of Occurrence: {{ report.loc_of_occurrence }}</b></small>
+                        <hr style="margin-top: 0; margin-bottom: 0; width: 85%">
+                        <hr style="margin-top: 2px;">
+                        <p class="card-text">{{ report.report_text|linebreaks }}</p>
+                        <small style="color: darkred"><b>Views: {{ report.counter }}</b></small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <div class="row">
+                    <div class="mywrapper">
+                        <span class="tracking-in-expand title" style="color: darkblue">Information</span>
+                    </div>
+                    <hr style="margin-top: 0; margin-bottom: 0; width: 85%">
+                    <hr style="margin-top: 2px;">
+                </div>
+                <div class="row">
+                    <div class="col-lg-5">Reporter:</div>
+                    <div class="col-lg-7">{{ report.reporter.first_name }} {{ report.reporter.last_name }}</div>
+                </div>
+                <hr style="margin-top: 2px; margin-bottom: 2px">
+                <div class="row">
+                    <div class="col-lg-5">Created on:</div>
+                    <div class="col-lg-7">{{ report.created_on.date }}</div>
+                </div>
+                <hr style="margin-top: 2px; margin-bottom: 2px">
+                <div class="row">
+                    <div class="col-lg-5">Current Category:</div>
+                    <div class="col-lg-7">{{ report.category }}</div>
+                </div>
+                {% if report.pre_cat != 'Same' %}
+                    <hr style="margin-top: 2px; margin-bottom: 2px">
+                    <div class="row">
+                        <div class="col-lg-5">Previous Category:</div>
+                        <div class="col-lg-7">{{ report.pre_cat }}</div>
+                    </div>
+
+                {% endif %}
+                <hr style="margin-top: 2px; margin-bottom: 2px">
+                <hr>
+
+                <form method="post" action="{% url 'App_main:change-cat' pk=report.id %}">
+                    {% csrf_token %}
+                    <fieldset>
+                        <div class="mb-3">
+                            <label for="new_cat" class="form-label">New Category <sub>(Optional)</sub></label>
+                            <input type="text" id="new_cat" name="new_cat" class="form-control"
+                                   placeholder="example: Sports">
+                        </div>
+                        <button type="submit" class="btn btn-primary" style="background: #00008BFF;">Submit</button>
+                    </fieldset>
+                </form>
+                <hr>
+                <hr>
+
+                {% if report.status and report.rejected == False %}
+                    <div class="d-grid gap-2">
+                        <h3 class="btn btn-success" style="color: white!important;">Approved</h3>
+                    </div>
+                {% elif report.rejected and report.status == False %}
+                    <div class="d-grid gap-2">
+                        <h3 class="btn btn-danger" style="color: white!important;">Rejected</h3>
+                    </div>
+                {% else %}
+                    <div class="d-grid gap-2">
+                        <a href="{% url 'App_main:approve' pk=report.id %}" type="button" class="btn btn-primary" style="color: white!important;">Approve</a>
+                        <a href="{% url 'App_main:reject' pk=report.id %}" type="button" class="btn btn-danger" style="color: white!important;">Approve</a>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

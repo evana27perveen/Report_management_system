@@ -1,0 +1,144 @@
+{% extends 'hod/base.html' %}
+{% load static %}
+{% load crispy_forms_filters %}
+{% block title %}
+Dashboard
+{% endblock %}
+{% block sec %}
+    <section class="grid">
+        <article
+                style="background-color:#000000; height: fit-content!important; padding-bottom: 10px; padding-top: 10px; padding-left: 20%!important;">
+            <div class="container">
+                    <div class="row">
+                        <div class="col-lg-4" style="margin-top: 25px">
+                            <div class="neon__card_for_month" style="margin: 5px">
+                                <a href="" style="text-decoration: none; color: white"><img
+                                        src="{{ profile.profile_picture.url }}" width="200px" height="230px"></a>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-8">
+
+                            <div class="" style="margin: 25px; color: white;">
+                                <h1 class="neon__title_for_routine">
+                                    <b>{{ profile.user.first_name }} {{ profile.user.last_name }} </b></h1>
+                                <hr style="margin-bottom: 2px!important;">
+                                <hr>
+                                <div class="row">
+                                    <div class="col-lg-3"><h1 style="font-size: 14px; float: left!important;">
+                                        NID:</h1></div>
+                                    <div class="col-lg-9"><h1 style="font-size: 14px; float: left!important;">
+                                        {{ profile.nid }}</h1></div>
+                                </div>
+                                <hr style="margin-top: 3px!important; margin-bottom: 5px!important;">
+                                <div class="row">
+                                    <div class="col-lg-3"><h1 style="font-size: 14px; float: left!important;">
+                                        Employee Id:</h1></div>
+                                    <div class="col-lg-9"><h1 style="font-size: 14px; float: left!important;">
+                                        {{ profile.employee_id }}</h1></div>
+                                </div>
+                                <hr style="margin-top: 3px!important; margin-bottom: 5px!important;">
+                                <div class="row">
+                                    <div class="col-lg-3"><h1 style="font-size: 14px; float: left!important;">
+                                        Contact:</h1></div>
+                                    <div class="col-lg-9"><h1 style="font-size: 14px; float: left!important;">
+                                        {{ profile.phone_number }}</h1></div>
+                                </div>
+                                <hr style="margin-top: 0!important; margin-bottom: 2px!important;">
+                                <div class="row">
+                                    <div class="col-lg-3"><h1 style="font-size: 14px; float: left!important;">
+                                        Email:</h1></div>
+                                    <div class="col-lg-9"><h1 style="font-size: 14px; float: left!important;">
+                                        {{ profile.user.email }}</h1></div>
+                                </div>
+                                <hr style="margin-top: 0!important; margin-bottom: 2px!important;">
+                                <div class="row">
+                                    <div class="col-lg-3"><h1 style="font-size: 14px; float: left!important;">
+                                        Address:</h1></div>
+                                    <div class="col-lg-9"><h1 style="font-size: 14px; float: left!important;">
+                                        {{ profile.address }}</h1></div>
+                                </div>
+                                <hr style="margin-top: 3px!important; margin-bottom: 5px!important;">
+                                <div class="row">
+                                    <div class="col-lg-3"><h1 style="font-size: 14px; float: left!important;">
+                                        Joining Date:</h1></div>
+                                    <div class="col-lg-9"><h1 style="font-size: 14px; float: left!important;">
+                                        {{ profile.joining_date }}</h1></div>
+                                </div>
+                                <hr style="margin-top: 3px!important; margin-bottom: 2px!important;">
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <hr style="color: white; width: 98%; margin-top: 0;">
+                <hr style="color: white; width: 98%;">
+
+            <hr style="color: white; width: 98%;">
+            <div class="container" style="padding-right: 5%">
+                <div class="row" style="width: 100%">
+                    <div class="col-lg-4">
+                        <div class="neon__card" style="margin: 20px">
+                            <a href="{% url 'App_main:all-hods' %}" style="text-decoration: none; color: white"><h1
+                                    class="neon__title">Department-Heads</h1></a>
+                            <p>{{ hods }}</p>
+                            <a href="{% url 'App_login:hod-signup' %}" class="neon__button">Add HOD
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="neon__card" style="margin: 20px">
+                            <a href="{% url 'App_main:all-officers' %}" style="text-decoration: none; color: white"><h1
+                                    class="neon__title">Officers</h1></a>
+                            <p>{{ officers }}</p>
+                            <a href="{% url 'App_login:officer-signup' %}" class="neon__button">Add Officers
+
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="neon__card" style="margin: 20px">
+                            <a href="{% url 'App_main:all-reporters' %}" style="text-decoration: none; color: white"><h1
+                                    class="neon__title">Reporters</h1></a>
+                            <p>{{ reporters }}</p>
+                            <a href="{% url 'App_login:reporter-signup' %}" class="neon__button">Add Reporters
+                            </a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <hr style="color: white; width: 98%;">
+            <div class="container" style="padding-right: 5%">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="neon__card_for_month" style="margin: 5px">
+                            <a href="{% url 'App_main:assign-report' %}" style="text-decoration: none; color: white"><h1
+                                    class="neon__title_for_routine"><b>New Reports To Assign - ({{ report_count }})</b>
+                            </h1></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="neon__card_for_month" style="margin: 5px">
+                            <a href="{% url 'App_main:assigned-report' %}" style="text-decoration: none; color: white">
+                                <h1
+                                        class="neon__title_for_routine"><b>Assigned Reports</b></h1></a>
+                        </div>
+                    </div>
+                </div>
+{#                <div class="row">#}
+{#                    <div class="col-lg-12">#}
+{#                        <div class="neon__card_for_month" style="margin: 5px">#}
+{#                            <a href="" style="text-decoration: none; color: white"><h1#}
+{#                                    class="neon__title_for_routine"><b>Re-Assign Report</b></h1></a>#}
+{#                        </div>#}
+{#                    </div>#}
+{#                </div>#}
+
+            </div>
+            <hr style="color: white; width: 98%;">
+        </article>
+    </section>
+{% endblock %}

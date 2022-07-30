@@ -1,0 +1,501 @@
+{% extends 'App_main/base.html' %}
+{% load static %}
+{% load crispy_forms_filters %}
+{% block title %}
+    Categories
+{% endblock %}
+
+{% block body %}
+    <style>
+        .portfolio .portfolio-item {
+            margin-bottom: 30px;
+        }
+
+        .portfolio #portfolio-flters {
+            margin: 0 auto 15px auto;
+            list-style: none;
+            text-align: center;
+            border-radius: 50px;
+            padding: 2px 15px;
+        }
+
+        .portfolio #portfolio-flters li {
+            cursor: pointer;
+            display: inline-block;
+            padding: 8px 16px 10px 16px;
+            font-size: 14px;
+            font-weight: 600;
+            line-height: 1;
+            text-transform: uppercase;
+            color: #090000;
+            background: rgba(255, 255, 255, 0.1);
+            margin: 0 3px 10px 3px;
+            transition: all 0.3s ease-in-out;
+            border-radius: 4px;
+        }
+
+        .portfolio #portfolio-flters li:hover, .portfolio #portfolio-flters li.filter-active {
+            background: #04344d;
+            color: white;
+        }
+
+        .portfolio #portfolio-flters li:last-child {
+            margin-right: 0;
+        }
+
+        .portfolio .portfolio-wrap {
+            transition: 0.3s;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+            background: rgba(0, 0, 0, 0.6);
+        }
+
+        .portfolio .portfolio-wrap::before {
+            content: "";
+            background: rgba(0, 0, 0, 0.6);
+            position: absolute;
+            left: 30px;
+            right: 30px;
+            top: 30px;
+            bottom: 30px;
+            transition: all ease-in-out 0.3s;
+            z-index: 2;
+            opacity: 0;
+        }
+
+        .portfolio .portfolio-wrap .portfolio-info {
+            opacity: 0;
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            text-align: center;
+            z-index: 3;
+            transition: all ease-in-out 0.3s;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .portfolio .portfolio-wrap .portfolio-info::before {
+            display: block;
+            content: "";
+            width: 48px;
+            height: 48px;
+            position: absolute;
+            top: 35px;
+            left: 35px;
+            border-top: 3px solid #fff;
+            border-left: 3px solid #fff;
+            transition: all 0.5s ease 0s;
+            z-index: 9994;
+        }
+
+        .portfolio .portfolio-wrap .portfolio-info::after {
+            display: block;
+            content: "";
+            width: 48px;
+            height: 48px;
+            position: absolute;
+            bottom: 35px;
+            right: 35px;
+            border-bottom: 3px solid #090000;
+            border-right: 3px solid #090000;
+            transition: all 0.5s ease 0s;
+            z-index: 9994;
+        }
+
+        .portfolio .portfolio-wrap .portfolio-info h4 {
+            font-size: 20px;
+            color: #090000;
+            font-weight: 600;
+        }
+
+        .portfolio .portfolio-wrap .portfolio-info p {
+            color: #090000;
+            font-size: 14px;
+            text-transform: uppercase;
+            padding: 0;
+            margin: 0;
+        }
+
+        .portfolio .portfolio-wrap .portfolio-links {
+            text-align: center;
+            z-index: 4;
+        }
+
+        .portfolio .portfolio-wrap .portfolio-links a {
+            color: #fff;
+            margin: 0 2px;
+            font-size: 28px;
+            display: inline-block;
+            transition: 0.3s;
+        }
+
+        .portfolio .portfolio-wrap .portfolio-links a:hover {
+            color: #04344d;
+        }
+
+        .portfolio .portfolio-wrap:hover::before {
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            opacity: 1;
+        }
+
+        .portfolio .portfolio-wrap:hover .portfolio-info {
+            opacity: 1;
+        }
+
+        .portfolio .portfolio-wrap:hover .portfolio-info::before {
+            top: 15px;
+            left: 15px;
+        }
+
+        .portfolio .portfolio-wrap:hover .portfolio-info::after {
+            bottom: 15px;
+            right: 15px;
+        }
+    </style>
+
+    {#    -----------------------------read more button----------------------------#}
+    <style>
+
+        .the-arrow {
+            width: 64px;
+            transition: all 0.2s;
+        }
+
+        .the-arrow.-left {
+            position: absolute;
+            top: 60%;
+            left: 0;
+        }
+
+        .the-arrow.-left > .shaft {
+            width: 0;
+            background-color: #999;
+        }
+
+        .the-arrow.-left > .shaft:before, .the-arrow.-left > .shaft:after {
+            width: 0;
+            background-color: #999;
+        }
+
+        .the-arrow.-left > .shaft:before {
+            transform: rotate(0);
+        }
+
+        .the-arrow.-left > .shaft:after {
+            transform: rotate(0);
+        }
+
+        .the-arrow.-right {
+            top: 3px;
+        }
+
+        .the-arrow.-right > .shaft {
+            width: 64px;
+            transition-delay: 0.2s;
+        }
+
+        .the-arrow.-right > .shaft:before, .the-arrow.-right > .shaft:after {
+            width: 8px;
+            transition-delay: 0.3s;
+            transition: all 0.5s;
+        }
+
+        .the-arrow.-right > .shaft:before {
+            transform: rotate(40deg);
+        }
+
+        .the-arrow.-right > .shaft:after {
+            transform: rotate(-40deg);
+        }
+
+        .the-arrow > .shaft {
+            background-color: #999;
+            display: block;
+            height: 1px;
+            position: relative;
+            transition: all 0.2s;
+            transition-delay: 0s;
+            will-change: transform;
+        }
+
+        .the-arrow > .shaft:before, .the-arrow > .shaft:after {
+            background-color: #999;
+            content: "";
+            display: block;
+            height: 1px;
+            position: absolute;
+            top: 0;
+            right: 0;
+            transition: all 0.2s;
+            transition-delay: 0s;
+        }
+
+        .the-arrow > .shaft:before {
+            transform-origin: top right;
+        }
+
+        .the-arrow > .shaft:after {
+            transform-origin: bottom right;
+        }
+
+        .animated-arrow {
+            display: inline-block;
+            color: #999;
+            font-size: 1.25em;
+            font-style: italic;
+            text-decoration: none;
+            position: relative;
+            transition: all 0.2s;
+        }
+
+        .animated-arrow:hover {
+            color: #eaeaea;
+        }
+
+        .animated-arrow:hover > .the-arrow.-left > .shaft {
+            width: 64px;
+            transition-delay: 0.1s;
+            background-color: #eaeaea;
+        }
+
+        .animated-arrow:hover > .the-arrow.-left > .shaft:before, .animated-arrow:hover > .the-arrow.-left > .shaft:after {
+            width: 8px;
+            transition-delay: 0.1s;
+            background-color: #eaeaea;
+        }
+
+        .animated-arrow:hover > .the-arrow.-left > .shaft:before {
+            transform: rotate(40deg);
+        }
+
+        .animated-arrow:hover > .the-arrow.-left > .shaft:after {
+            transform: rotate(-40deg);
+        }
+
+        .animated-arrow:hover > .main {
+            transform: translateX(80px);
+        }
+
+        .animated-arrow:hover > .main > .the-arrow.-right > .shaft {
+            width: 0;
+            transform: translateX(200%);
+            transition-delay: 0s;
+        }
+
+        .animated-arrow:hover > .main > .the-arrow.-right > .shaft:before, .animated-arrow:hover > .main > .the-arrow.-right > .shaft:after {
+            width: 0;
+            transition-delay: 0s;
+            transition: all 0.1s;
+        }
+
+        .animated-arrow:hover > .main > .the-arrow.-right > .shaft:before {
+            transform: rotate(0);
+        }
+
+        .animated-arrow:hover > .main > .the-arrow.-right > .shaft:after {
+            transform: rotate(0);
+        }
+
+        .animated-arrow > .main {
+            display: flex;
+            align-items: center;
+            transition: all 0.2s;
+        }
+
+        .animated-arrow > .main > .text {
+            margin: 0 16px 0 0;
+            line-height: 1;
+        }
+
+        .animated-arrow > .main > .the-arrow {
+            position: relative;
+        }
+    </style>
+    {#    -----------------------------read more button ends----------------------------#}
+
+    <section id="portfolio" class="portfolio">
+        <div class="">
+
+            <div class="row" style="border-bottom: 2px solid black; margin-bottom: 10px">
+                <div class="col-lg-12 d-flex justify-content-center">
+                    <ul id="portfolio-flters">
+                        <li data-filter="*" class="filter-active">All</li>
+                        {% for cat in cats %}
+                            <li data-filter=".filter-{{ cat }}">{{ cat }}</li>
+                        {% endfor %}
+
+                    </ul>
+                </div>
+            </div>
+
+            <div class="row portfolio-container" style="margin-left: 20px; margin-right: 25px">
+                {% for report in reports %}
+                    <div class="col-lg-4 col-md-6 portfolio-item filter-{{ report.category }}">
+
+                        <div class="col-lg-12" style="margin: 5px; text-align: center; border-bottom: 1px solid black">
+                            <img src="{{ report.report_image1.url }}" class="card-img-top" alt="..." height="200"
+                                 width="400">
+                            <div class="card-body" style="font-family: 'PT Serif', serif;">
+                                <small style="font-size: 12px!important; background-color:#800f1b; color: white; padding: 2px 2px;"><b>---{{ report.category }}---</b></small>
+                                <h5 class="card-title"><b>{{ report.title }}</b></h5>
+                                <sup style="text-align: right"><b><i class="fa fa-eye"></i> →{{ report.counter }}
+                                </b></sup>
+                                <p class="card-text">{{ report.report_text|truncatewords:30 }}</p>
+                                <a class='animated-arrow' href="{% url 'App_main:report-view' pk=report.id %}"><span
+                                        class='the-arrow -left'>
+                                    <span class='shaft'></span></span>
+                                    <span class='main'>
+                                        <span class='text' style="color: black">Read More</span>
+                                        <span class='the-arrow -right'>
+                                            <span class='shaft'></span>
+                                        </span>
+                                    </span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+                {% for report in reports %}
+                    <div class="col-lg-4 col-md-6 portfolio-item filter-{{ report.category }}">
+
+                        <div class="col-lg-12" style="margin: 5px; text-align: center; border-bottom: 1px solid black">
+                            <img src="{{ report.report_image1.url }}" class="card-img-top" alt="..." height="200"
+                                 width="400">
+                            <div class="card-body" style="font-family: 'PT Serif', serif;">
+                                <small style="font-size: 12px!important; background-color:#800f1b; color: white; padding: 2px 2px;"><b>---{{ report.category }}---</b></small>
+                                <h5 class="card-title"><b>{{ report.title }}</b></h5>
+                                <sup style="text-align: right"><b><i class="fa fa-eye"></i> →{{ report.counter }}
+                                </b></sup>
+                                <p class="card-text">{{ report.report_text|truncatewords:30 }}</p>
+                                <a class='animated-arrow' href="{% url 'App_main:report-view' pk=report.id %}"><span
+                                        class='the-arrow -left'>
+                                    <span class='shaft'></span></span>
+                                    <span class='main'>
+                                        <span class='text' style="color: black">Read More</span>
+                                        <span class='the-arrow -right'>
+                                            <span class='shaft'></span>
+                                        </span>
+                                    </span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+                {% for report in reports %}
+                    <div class="col-lg-4 col-md-6 portfolio-item filter-{{ report.category }}">
+
+                        <div class="col-lg-12" style="margin: 5px; text-align: center; border-bottom: 1px solid black">
+                            <img src="{{ report.report_image1.url }}" class="card-img-top" alt="..." height="200"
+                                 width="400">
+                            <div class="card-body" style="font-family: 'PT Serif', serif;">
+                                <small style="font-size: 12px!important; background-color:#800f1b; color: white; padding: 2px 2px;"><b>---{{ report.category }}---</b></small>
+                                <h5 class="card-title"><b>{{ report.title }}</b></h5>
+                                <sup style="text-align: right"><b><i class="fa fa-eye"></i> →{{ report.counter }}
+                                </b></sup>
+                                <p class="card-text">{{ report.report_text|truncatewords:30 }}</p>
+                                <a class='animated-arrow' href="{% url 'App_main:report-view' pk=report.id %}"><span
+                                        class='the-arrow -left'>
+                                    <span class='shaft'></span></span>
+                                    <span class='main'>
+                                        <span class='text' style="color: black">Read More</span>
+                                        <span class='the-arrow -right'>
+                                            <span class='shaft'></span>
+                                        </span>
+                                    </span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+                {% for report in reports %}
+                    <div class="col-lg-4 col-md-6 portfolio-item filter-{{ report.category }}">
+
+                        <div class="col-lg-12" style="margin: 5px; text-align: center; border-bottom: 1px solid black">
+                            <img src="{{ report.report_image1.url }}" class="card-img-top" alt="..." height="200"
+                                 width="400">
+                            <div class="card-body" style="font-family: 'PT Serif', serif;">
+                                <small style="font-size: 12px!important; background-color:#800f1b; color: white; padding: 2px 2px;"><b>---{{ report.category }}---</b></small>
+                                <h5 class="card-title"><b>{{ report.title }}</b></h5>
+                                <sup style="text-align: right"><b><i class="fa fa-eye"></i> →{{ report.counter }}
+                                </b></sup>
+                                <p class="card-text">{{ report.report_text|truncatewords:30 }}</p>
+                                <a class='animated-arrow' href="{% url 'App_main:report-view' pk=report.id %}"><span
+                                        class='the-arrow -left'>
+                                    <span class='shaft'></span></span>
+                                    <span class='main'>
+                                        <span class='text' style="color: black">Read More</span>
+                                        <span class='the-arrow -right'>
+                                            <span class='shaft'></span>
+                                        </span>
+                                    </span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Vendor JS Files -->
+    <script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
+    <script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'vendor/jquery.easing/jquery.easing.min.js' %}"></script>
+    <script src="{% static 'vendor/php-email-form/validate.js' %}"></script>
+    <script src="{% static 'vendor/waypoints/jquery.waypoints.min.js' %}"></script>
+    <script src="{% static 'vendor/counterup/counterup.min.js' %}"></script>
+    <script src="{% static 'vendor/owl.carousel/owl.carousel.min.js' %}"></script>
+    <script src="{% static 'vendor/isotope-layout/isotope.pkgd.min.js' %}"></script>
+    <script src="{% static 'vendor/venobox/venobox.min.js' %}"></script>
+
+    <script>
+        !(function ($) {
+            "use strict";
+            // Porfolio isotope and filter
+            $(window).on('load', function () {
+                var portfolioIsotope = $('.portfolio-container').isotope({
+                    itemSelector: '.portfolio-item',
+                    layoutMode: 'fitRows'
+                });
+
+                $('#portfolio-flters li').on('click', function () {
+                    $("#portfolio-flters li").removeClass('filter-active');
+                    $(this).addClass('filter-active');
+
+                    portfolioIsotope.isotope({
+                        filter: $(this).data('filter')
+                    });
+                });
+
+            });
+
+            // Initiate venobox (lightbox feature used in portofilo)
+            $(document).ready(function () {
+                $('.venobox').venobox({
+                    'share': false
+                });
+            });
+
+            // Portfolio details carousel
+            $(".portfolio-details-carousel").owlCarousel({
+                autoplay: true,
+                dots: true,
+                loop: true,
+                items: 1
+            });
+        })
+        (jQuery);
+    </script>
+
+{% endblock %}

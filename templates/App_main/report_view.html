@@ -1,0 +1,177 @@
+{% extends 'App_main/base.html' %}
+{% load static %}
+{% load crispy_forms_filters %}
+{% block title %}
+    Report-View
+{% endblock %}
+
+{% block body %}
+    <style>
+        .main_div {
+            background-color: #f5e6ad;
+            width: 100%;
+        }
+    </style>
+    {#    ----------------------------wrap-------------------#}
+    <style>
+        .mywrapper {
+            min-height: 5vh;
+            display: block;
+            flex-wrap: nowrap;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .title {
+            color: black;
+            font-family: Montserrat;
+            text-transform: uppercase;
+            text-align: center;
+            font-weight: 500;
+            font-size: 2em;
+        }
+
+
+        .tracking-in-expand {
+            -webkit-animation: tracking-in-expand 2s cubic-bezier(0.215, 0.610, 0.355, 1.000) 0.5s both;
+            animation: tracking-in-expand 2s cubic-bezier(0.215, 0.610, 0.355, 1.000) 0.5s both;
+        }
+
+        @-webkit-keyframes tracking-in-expand {
+            0% {
+                letter-spacing: -0.5em;
+                opacity: 0;
+            }
+
+            40% {
+                opacity: 0.6;
+            }
+
+            60% {
+                -webkit-transform: translateY(0);
+                transform: translateY(0);
+            }
+
+            70% {
+                -webkit-transform: translateY(0);
+                transform: translateY(0);
+            }
+
+            100% {
+                opacity: 1;
+                -webkit-transform: translateY(-22vh);
+                transform: translateY(-22vh);
+            }
+        }
+
+        @keyframes tracking-in-expand {
+            0% {
+                letter-spacing: -0.5em;
+                opacity: 0;
+            }
+
+            40% {
+                opacity: 0.6;
+            }
+
+            60% {
+                -webkit-transform: translateY(0);
+                transform: translateY(0);
+            }
+
+            70% {
+                -webkit-transform: translateY(0);
+                transform: translateY(0);
+            }
+
+            100% {
+                opacity: 1;
+                -webkit-transform: translateY(-22vh);
+                transform: translateY(-22vh);
+            }
+        }
+    </style>
+
+    <div class="container" style="font-family: 'PT Serif', serif;">
+        <div class="row">
+            <div class="col-lg-9" style="overflow-y: scroll; height: 93vh;">
+                <div class="row">
+                    {% if report.report_image1 %}
+                        <div class="col-lg-6" style="margin-top: 10px; width: fit-content!important;">
+                            <img src="{{ report.report_image1.url }}" alt="" height="300px"
+                                 width="320px">
+                        </div>
+                    {% endif %}
+                    {% if report.report_image2 %}
+                        <div class="col-lg-6" style="margin-top: 10px; width: fit-content!important;">
+                            <img src="{{ report.report_image2.url }}" alt="" height="300px"
+                                 width="320px">
+                        </div>
+                    {% endif %}
+                    {% if report.report_image3 %}
+                        <div class="col-lg-6" style="margin-top: 10px; width: fit-content; margin-left: 30%">
+                            <img src="{{ report.report_image3.url }}" alt="" height="300px"
+                                 width="320px">
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="row">
+                    <div class="card-body" style="margin-top: 10px">
+                        <h4 class="card-title"><b>{{ report.title }}</b></h4>
+                        <small class="card-title" style="color: darkred"><b>Location of
+                            Occurrence: {{ report.loc_of_occurrence }}</b></small>
+                        <hr style="margin-top: 0; margin-bottom: 0; width: 85%">
+                        <hr style="margin-top: 2px;">
+                        <p class="card-text">{{ report.report_text|linebreaks }}</p>
+                        <small style="color: darkred"><b>Views: {{ report.counter }}</b></small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <div class="row">
+                    <div class="mywrapper">
+                        <span class="tracking-in-expand title" style="color: darkblue">Information</span>
+                    </div>
+                    <hr style="margin-top: 0; margin-bottom: 0; width: 85%">
+                    <hr style="margin-top: 2px;">
+                </div>
+                <div class="row">
+                    <div class="col-lg-5">Reporter:</div>
+                    <div class="col-lg-7">{{ report.reporter.first_name }} {{ report.reporter.last_name }}</div>
+                </div>
+                <hr>
+                {% if report.status and report.rejected == False %}
+                <div class="row">
+                    <div class="col-lg-5">Publisher:</div>
+                    <div class="col-lg-7">{{ report.published_by.user.first_name }} {{ report.published_by.user.last_name }}</div>
+                </div>
+                {% elif report.rejected and report.status == False %}
+                <div class="row">
+                    <div class="col-lg-5">Status:</div>
+                    <div class="col-lg-7" style="color: darkred">Rejected</div>
+                </div>
+                {% else %}
+                <div class="row">
+                    <div class="col-lg-5">Status:</div>
+                    <div class="col-lg-7" style="color: darkblue">Pending</div>
+                </div>
+                {% endif %}
+                <hr>
+                <div class="row">
+                    <div class="col-lg-5">Current Category:</div>
+                    <div class="col-lg-7">{{ report.category }}</div>
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col-lg-5">Previous Category:</div>
+                    <div class="col-lg-7">{{ report.pre_cat }}</div>
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col-lg-5">Created on:</div>
+                    <div class="col-lg-7">{{ report.created_on.date }}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
